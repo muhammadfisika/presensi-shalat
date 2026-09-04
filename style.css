@@ -1,0 +1,173 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+
+/* HEADER */
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.icon {
+    font-size: 55px;
+}
+
+.header h1 {
+    margin: 5px 0;
+}
+
+.header p {
+    margin-top: 5px;
+    color: #64748b;
+}
+
+
+/* CARD */
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* LABEL */
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+
+/* INPUT */
+
+input[type="date"],
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+}
+
+
+/* STATUS */
+
+.status-container {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-box {
+    flex: 1;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.radio-box input {
+    margin-right: 5px;
+}
+
+
+/* BUTTON */
+
+#btnScan {
+    width: 100%;
+    margin-top: 25px;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+}
+
+#btnScan:hover {
+    opacity: 0.9;
+}
+
+
+/* PESAN */
+
+.pesan {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+/* SCANNER */
+
+.scanner-container {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+#reader {
+    width: 100%;
+    margin-top: 15px;
+}
+
+
+/* STOP BUTTON */
+
+.btnStop {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #dc2626;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* HASIL */
+
+.hasil {
+    margin-top: 20px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+#hasilData {
+    margin-top: 15px;
+    line-height: 1.8;
+}
