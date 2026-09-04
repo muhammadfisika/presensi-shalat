@@ -171,3 +171,27 @@ select {
     margin-top: 15px;
     line-height: 1.8;
 }
+
+#reader {
+    width: 100%;
+    max-width: 400px;
+    margin: 15px auto;
+}
+
+#reader video {
+    width: 100% !important;
+    border-radius: 10px;
+}
+
+#reader__scan_region {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#reader__dashboard {
+    margin-top: 10px;
+}
+
+#reader__dashboard_section_csr {
+    display: none;
+}
