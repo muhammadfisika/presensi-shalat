@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Presensi Shalat</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="icon">🕌</div>
+        <h1>Presensi Shalat</h1>
+        <p>Presensi kehadiran melalui QR Code</p>
+    </div>
+
+
+    <div class="card">
+
+        <!-- TANGGAL -->
+        <label for="tanggal">
+            Tanggal
+        </label>
+
+        <input
+            type="date"
+            id="tanggal"
+        >
+
+
+        <!-- JENIS SHALAT -->
+        <label for="shalat">
+            Jenis Shalat
+        </label>
+
+        <select id="shalat">
+
+            <option value="">
+                -- Pilih Shalat --
+            </option>
+
+            <option value="Dhuha">
+                Dhuha
+            </option>
+
+            <option value="Dhuhur">
+                Dhuhur
+            </option>
+
+            <option value="Ashar">
+                Ashar
+            </option>
+
+        </select>
+
+
+        <!-- STATUS -->
+        <label>
+            Status
+        </label>
+
+        <div class="status-container">
+
+            <label class="radio-box">
+
+                <input
+                    type="radio"
+                    name="status"
+                    value="Hadir"
+                >
+
+                <span>Hadir</span>
+
+            </label>
+
+
+            <label class="radio-box">
+
+                <input
+                    type="radio"
+                    name="status"
+                    value="Haid"
+                >
+
+                <span>Haid</span>
+
+            </label>
+
+        </div>
+
+
+        <!-- TOMBOL SCAN -->
+
+        <button
+            id="btnScan"
+            onclick="mulaiScan()"
+        >
+
+            📷 MULAI SCAN QR CODE
+
+        </button>
+
+
+        <!-- PESAN -->
+
+        <div
+            id="pesan"
+            class="pesan"
+        ></div>
+
+    </div>
+
+
+    <!-- AREA SCANNER -->
+
+    <div
+        id="scannerContainer"
+        class="scanner-container"
+        style="display:none;"
+    >
+
+        <h2>Scan QR Code</h2>
+
+        <p>
+            Arahkan kamera ke QR Code siswa
+        </p>
+
+
+        <div id="reader"></div>
+
+
+        <button
+            class="btnStop"
+            onclick="stopScanner()"
+        >
+
+            ✕ Tutup Kamera
+
+        </button>
+
+    </div>
+
+
+    <!-- HASIL -->
+
+    <div
+        id="hasil"
+        class="hasil"
+        style="display:none;"
+    >
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h2>
+            Input kehadiran berhasil
+        </h2>
+
+        <div id="hasilData"></div>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
