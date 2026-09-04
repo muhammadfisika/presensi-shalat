@@ -1,42 +1,67 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2563eb">
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Presensi Shalat</title>
+    <meta name="theme-color"
+          content="#2563eb">
 
-    <link rel="stylesheet" href="style.css">
+    <title>Presensi Shalat QR</title>
 
-    <!-- Library QR Scanner -->
-    <script src="https://unpkg.com/html5-qrcode"
-            type="text/javascript"></script>
+    <link rel="stylesheet"
+          href="style.css">
+
+    <!-- Library Scanner QR -->
+    <script
+        src="https://unpkg.com/html5-qrcode"
+        type="text/javascript">
+    </script>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
+    <!-- ============================= -->
     <!-- HEADER -->
+    <!-- ============================= -->
+
     <div class="header">
 
-        <div class="icon">🕌</div>
+        <div class="icon">
+            🕌
+        </div>
 
-        <h1>Presensi Shalat</h1>
+        <h1>
+            Presensi Shalat
+        </h1>
 
         <p>
-            Presensi kehadiran melalui QR Code
+            Presensi kehadiran siswa melalui QR Code
         </p>
 
     </div>
 
 
-    <!-- FORM -->
+    <!-- ============================= -->
+    <!-- PENGATURAN PRESENSI -->
+    <!-- ============================= -->
+
     <div class="card">
+
+        <h2>
+            Pengaturan Presensi
+        </h2>
+
+
+        <!-- TANGGAL -->
 
         <label for="tanggal">
             Tanggal
@@ -47,6 +72,8 @@
             id="tanggal"
         >
 
+
+        <!-- SHALAT -->
 
         <label for="shalat">
             Jenis Shalat
@@ -73,9 +100,12 @@
         </select>
 
 
+        <!-- STATUS -->
+
         <label>
             Status
         </label>
+
 
         <div class="status-container">
 
@@ -87,7 +117,9 @@
                     value="Hadir"
                 >
 
-                <span>Hadir</span>
+                <span>
+                    ✓ Hadir
+                </span>
 
             </label>
 
@@ -100,95 +132,207 @@
                     value="Haid"
                 >
 
-                <span>Haid</span>
+                <span>
+                    ♀ Haid
+                </span>
 
             </label>
 
         </div>
 
 
+        <!-- BUTTON MULAI -->
+
         <button
             id="btnScan"
             onclick="mulaiScan()"
         >
-
             📷 MULAI SCAN QR CODE
-
         </button>
 
 
+        <!-- PESAN -->
+
         <div
             id="pesan"
-            class="pesan"
-        ></div>
+            class="pesan">
+        </div>
 
     </div>
 
 
-    <!-- SCANNER -->
+    <!-- ============================= -->
+    <!-- AREA SCANNER -->
+    <!-- ============================= -->
+
     <div
         id="scannerContainer"
         class="scanner-container"
         style="display:none;"
     >
 
-        <h2>Scan QR Code</h2>
+        <h2>
+            📷 Scanner QR Code
+        </h2>
 
-        <p>
+
+        <p class="petunjuk">
             Arahkan kamera ke QR Code siswa
         </p>
 
 
-        <div id="reader"></div>
+        <!-- STATUS SCANNER -->
 
+        <div
+            id="scannerStatus"
+            class="scanner-status"
+        >
+            Kamera belum aktif
+        </div>
+
+
+        <!-- AREA KAMERA -->
+
+        <div
+            class="camera-wrapper"
+        >
+
+            <div
+                id="reader">
+            </div>
+
+
+            <!-- NOTIFIKASI MELAYANG -->
+
+            <div
+                id="notifikasi"
+                class="notifikasi"
+            >
+
+                <div
+                    id="notifikasiIcon"
+                    class="notifikasi-icon">
+                </div>
+
+
+                <div
+                    class="notifikasi-content"
+                >
+
+                    <div
+                        id="notifikasiJudul"
+                        class="notifikasi-judul">
+                    </div>
+
+
+                    <div
+                        id="notifikasiPesan"
+                        class="notifikasi-pesan">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PETUNJUK -->
+
+        <div
+            id="scanInfo"
+            class="scan-info"
+        >
+            Scan siswa berikutnya...
+        </div>
+
+
+        <!-- BUTTON SELESAI -->
 
         <button
             class="btnStop"
             onclick="stopScanner()"
         >
-
-            ✕ Tutup Kamera
-
+            ⏹ SELESAI SCAN
         </button>
 
     </div>
 
 
-    <!-- HASIL SCAN -->
+    <!-- ============================= -->
+    <!-- HASIL TERAKHIR -->
+    <!-- ============================= -->
+
     <div
         id="hasil"
         class="hasil"
         style="display:none;"
     >
 
-        <div class="success-icon">
-            ✓
+        <h2>
+            📋 Presensi Terakhir
+        </h2>
+
+
+        <div
+            id="hasilData">
         </div>
 
-        <h2>QR Berhasil Dibaca</h2>
-
-        <div id="hasilData"></div>
-
     </div>
+
 
 </div>
 
 
-<script src="script.js"></script>
+<!-- ============================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================= -->
+
+<script
+    src="script.js">
+</script>
+
+
+<!-- ============================= -->
+<!-- SERVICE WORKER -->
+<!-- ============================= -->
+
 <script>
 
 if ("serviceWorker" in navigator) {
 
-    window.addEventListener("load", () => {
+    window.addEventListener(
+        "load",
+        function () {
 
-        navigator.serviceWorker.register(
-            "./service-worker.js"
-        );
+            navigator.serviceWorker
+                .register(
+                    "./service-worker.js"
+                )
+                .then(function () {
 
-    });
+                    console.log(
+                        "Service Worker aktif"
+                    );
+
+                })
+                .catch(function (error) {
+
+                    console.log(
+                        "Service Worker gagal:",
+                        error
+                    );
+
+                });
+
+        }
+    );
 
 }
 
 </script>
+
+
 </body>
+
 </html>
