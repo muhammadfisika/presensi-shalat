@@ -9,22 +9,33 @@
     <title>Presensi Shalat</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Library QR Scanner -->
+    <script src="https://unpkg.com/html5-qrcode"
+            type="text/javascript"></script>
 </head>
 
 <body>
 
 <div class="container">
 
+    <!-- HEADER -->
     <div class="header">
+
         <div class="icon">🕌</div>
+
         <h1>Presensi Shalat</h1>
-        <p>Presensi kehadiran melalui QR Code</p>
+
+        <p>
+            Presensi kehadiran melalui QR Code
+        </p>
+
     </div>
 
 
+    <!-- FORM -->
     <div class="card">
 
-        <!-- TANGGAL -->
         <label for="tanggal">
             Tanggal
         </label>
@@ -35,7 +46,6 @@
         >
 
 
-        <!-- JENIS SHALAT -->
         <label for="shalat">
             Jenis Shalat
         </label>
@@ -61,7 +71,6 @@
         </select>
 
 
-        <!-- STATUS -->
         <label>
             Status
         </label>
@@ -96,8 +105,6 @@
         </div>
 
 
-        <!-- TOMBOL SCAN -->
-
         <button
             id="btnScan"
             onclick="mulaiScan()"
@@ -108,8 +115,6 @@
         </button>
 
 
-        <!-- PESAN -->
-
         <div
             id="pesan"
             class="pesan"
@@ -118,8 +123,7 @@
     </div>
 
 
-    <!-- AREA SCANNER -->
-
+    <!-- SCANNER -->
     <div
         id="scannerContainer"
         class="scanner-container"
@@ -148,8 +152,7 @@
     </div>
 
 
-    <!-- HASIL -->
-
+    <!-- HASIL SCAN -->
     <div
         id="hasil"
         class="hasil"
@@ -160,9 +163,7 @@
             ✓
         </div>
 
-        <h2>
-            Input kehadiran berhasil
-        </h2>
+        <h2>QR Berhasil Dibaca</h2>
 
         <div id="hasilData"></div>
 
