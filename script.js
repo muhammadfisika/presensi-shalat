@@ -1,11 +1,24 @@
+// ======================================================
+// KONFIGURASI
+// ======================================================
+
+// GANTI dengan URL Web App Google Apps Script Anda
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbwxLATlIbHlM0OyKi8DHc6wIr2fRedGQXeOXSrdoMYD4WlvwahJcOInHLVBg7lWNau3/exec";
+
+
+// ======================================================
+// VARIABEL SCANNER
+// ======================================================
+
 let scanner = null;
 let scannerBerjalan = false;
 let sudahScan = false;
 
 
-// =====================================
+// ======================================================
 // MULAI SCAN
-// =====================================
+// ======================================================
 
 function mulaiScan() {
 
@@ -55,7 +68,7 @@ function mulaiScan() {
     }
 
 
-    // Reset hasil
+    // Reset
     sudahScan = false;
 
 
@@ -73,7 +86,6 @@ function mulaiScan() {
     tampilkanPesan("");
 
 
-    // Scroll ke scanner
     document.getElementById(
         "scannerContainer"
     ).scrollIntoView({
@@ -81,15 +93,14 @@ function mulaiScan() {
     });
 
 
-    // Jalankan kamera
     jalankanScanner();
 
 }
 
 
-// =====================================
-// JALANKAN SCANNER
-// =====================================
+// ======================================================
+// JALANKAN KAMERA
+// ======================================================
 
 function jalankanScanner() {
 
@@ -98,7 +109,8 @@ function jalankanScanner() {
     }
 
 
-    scanner = new Html5Qrcode("reader");
+    scanner =
+        new Html5Qrcode("reader");
 
 
     const config = {
@@ -125,10 +137,10 @@ function jalankanScanner() {
 
         qrCodeMessage => {
 
-            // Hindari scan berulang
             if (sudahScan) {
                 return;
             }
+
 
             sudahScan = true;
 
@@ -147,12 +159,13 @@ function jalankanScanner() {
 
         errorMessage => {
 
-            // Jangan tampilkan error
-            // setiap frame kamera.
+            // Error pembacaan frame
+            // tidak ditampilkan ke pengguna.
 
         }
 
     )
+
     .then(() => {
 
         scannerBerjalan = true;
@@ -162,6 +175,7 @@ function jalankanScanner() {
         );
 
     })
+
     .catch(error => {
 
         scannerBerjalan = false;
@@ -172,137 +186,269 @@ function jalankanScanner() {
         );
 
 
-        let pesan =
-            "❌ Kamera gagal dibuka.";
-
-
-        if (
-            error &&
-            error.name === "NotAllowedError"
-        ) {
-
-            pesan =
-                "❌ Izin kamera ditolak. " +
-                "Silakan izinkan kamera pada Chrome.";
-
-        }
-
-
-        if (
-            error &&
-            error.name === "NotFoundError"
-        ) {
-
-            pesan =
-                "❌ Kamera tidak ditemukan.";
-
-        }
-
-
-        if (
-            error &&
-            error.name === "NotReadableError"
-        ) {
-
-            pesan =
-                "❌ Kamera sedang digunakan " +
-                "aplikasi lain.";
-
-        }
-
-
-        tampilkanPesan(pesan);
+        tampilkanPesan(
+            "❌ Kamera gagal dibuka. " +
+            "Pastikan izin kamera diberikan."
+        );
 
     });
 
 }
 
 
-// =====================================
+// ======================================================
 // HASIL SCAN
-// =====================================
+// ======================================================
 
 function prosesHasilScan(qrCode) {
 
-    console.log(
-        "Hasil QR:",
-        qrCode
-    );
-
-
-    // Hentikan kamera
     stopScanner();
 
 
-    // Ambil data form
     const tanggal =
         document.getElementById("tanggal").value;
 
+
     const shalat =
         document.getElementById("shalat").value;
+
 
     const statusElement =
         document.querySelector(
             'input[name="status"]:checked'
         );
 
+
     const status =
         statusElement.value;
 
 
-    // Tampilkan hasil
-    document.getElementById(
-        "hasil"
-    ).style.display = "block";
-
-
-    document.getElementById(
-        "hasilData"
-    ).innerHTML = `
-
-        <p>
-            <strong>QR Code:</strong><br>
-            ${escapeHTML(qrCode)}
-        </p>
-
-        <p>
-            <strong>Tanggal:</strong><br>
-            ${escapeHTML(tanggal)}
-        </p>
-
-        <p>
-            <strong>Shalat:</strong><br>
-            ${escapeHTML(shalat)}
-        </p>
-
-        <p>
-            <strong>Status:</strong><br>
-            ${escapeHTML(status)}
-        </p>
-
-        <p>
-            <strong>✓ QR berhasil dibaca</strong>
-        </p>
-
-    `;
-
-
-    document.getElementById(
-        "hasil"
-    ).scrollIntoView({
-        behavior: "smooth"
-    });
-
-
-    // Bunyi beep
-    bunyiBeep();
+    // Kirim data ke Apps Script
+    kirimPresensi(
+        qrCode,
+        tanggal,
+        shalat,
+        status
+    );
 
 }
 
 
-// =====================================
+// ======================================================
+// KIRIM KE GOOGLE APPS SCRIPT
+// ======================================================
+
+async function kirimPresensi(
+    qrCode,
+    tanggal,
+    shalat,
+    status
+) {
+
+    tampilkanPesan(
+        "⏳ Memproses presensi..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(API_URL, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body: JSON.stringify({
+
+                    qrCode: qrCode,
+
+                    tanggal: tanggal,
+
+                    shalat: shalat,
+
+                    status: status
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Response Apps Script:",
+            data
+        );
+
+
+        prosesResponse(data);
+
+
+    } catch (error) {
+
+        console.error(
+            "Error API:",
+            error
+        );
+
+
+        tampilkanPesan(
+            "❌ Gagal terhubung ke server."
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// PROSES RESPONSE APPS SCRIPT
+// ======================================================
+
+function prosesResponse(data) {
+
+
+    // =========================================
+    // BERHASIL
+    // =========================================
+
+    if (data.status === "success") {
+
+        bunyiBeep();
+
+
+        document.getElementById(
+            "hasil"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "hasilData"
+        ).innerHTML = `
+
+            <p>
+                <strong>Nama</strong><br>
+                ${escapeHTML(data.nama)}
+            </p>
+
+            <p>
+                <strong>NIS</strong><br>
+                ${escapeHTML(
+                    String(data.nis)
+                )}
+            </p>
+
+            <p>
+                <strong>Kelas</strong><br>
+                ${escapeHTML(data.kelas)}
+            </p>
+
+            <p>
+                <strong>Shalat</strong><br>
+                ${escapeHTML(data.shalat)}
+            </p>
+
+            <p>
+                <strong>Status</strong><br>
+                ${escapeHTML(
+                    data.statusPresensi
+                )}
+            </p>
+
+            <div class="berhasil">
+                ✓ Input kehadiran berhasil
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "hasil"
+        ).scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+        return;
+    }
+
+
+    // =========================================
+    // DUPLIKAT
+    // =========================================
+
+    if (data.status === "duplicate") {
+
+        document.getElementById(
+            "hasil"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "hasilData"
+        ).innerHTML = `
+
+            <div class="duplikat">
+                ⚠️ Presensi sudah dilakukan
+            </div>
+
+            <p>
+                <strong>
+                    ${escapeHTML(data.nama)}
+                </strong>
+            </p>
+
+            <p>
+                Kelas:
+                ${escapeHTML(data.kelas)}
+            </p>
+
+            <p>
+                Shalat:
+                ${escapeHTML(data.shalat)}
+            </p>
+
+            <p>
+                Tanggal:
+                ${escapeHTML(data.tanggal)}
+            </p>
+
+        `;
+
+
+        document.getElementById(
+            "hasil"
+        ).scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+        return;
+    }
+
+
+    // =========================================
+    // ERROR
+    // =========================================
+
+    tampilkanPesan(
+        "❌ " +
+        (data.message ||
+        "Terjadi kesalahan.")
+    );
+
+}
+
+
+// ======================================================
 // STOP SCANNER
-// =====================================
+// ======================================================
 
 function stopScanner() {
 
@@ -313,28 +459,26 @@ function stopScanner() {
 
         scanner.stop()
 
-            .then(() => {
+        .then(() => {
 
-                scanner.clear();
+            scanner.clear();
 
-                scannerBerjalan = false;
+            scannerBerjalan =
+                false;
 
-                console.log(
-                    "Kamera dihentikan"
-                );
+        })
 
-            })
+        .catch(error => {
 
-            .catch(error => {
+            console.error(
+                "Gagal menghentikan kamera:",
+                error
+            );
 
-                console.error(
-                    "Gagal menghentikan kamera:",
-                    error
-                );
+            scannerBerjalan =
+                false;
 
-                scannerBerjalan = false;
-
-            });
+        });
 
     }
 
@@ -346,23 +490,26 @@ function stopScanner() {
 }
 
 
-// =====================================
-// BUNYI BEEP
-// =====================================
+// ======================================================
+// BEEP
+// ======================================================
 
 function bunyiBeep() {
 
     try {
 
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
         const audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+            new AudioContext();
 
 
         const oscillator =
             audioContext.createOscillator();
+
 
         const gainNode =
             audioContext.createGain();
@@ -372,6 +519,7 @@ function bunyiBeep() {
             gainNode
         );
 
+
         gainNode.connect(
             audioContext.destination
         );
@@ -379,6 +527,7 @@ function bunyiBeep() {
 
         oscillator.frequency.value =
             1000;
+
 
         oscillator.type =
             "sine";
@@ -400,7 +549,7 @@ function bunyiBeep() {
     } catch (error) {
 
         console.log(
-            "Beep tidak tersedia"
+            "Beep tidak tersedia."
         );
 
     }
@@ -408,9 +557,9 @@ function bunyiBeep() {
 }
 
 
-// =====================================
+// ======================================================
 // PESAN
-// =====================================
+// ======================================================
 
 function tampilkanPesan(teks) {
 
@@ -421,16 +570,17 @@ function tampilkanPesan(teks) {
 }
 
 
-// =====================================
-// KEAMANAN OUTPUT
-// =====================================
+// ======================================================
+// KEAMANAN HTML
+// ======================================================
 
 function escapeHTML(text) {
 
     const div =
         document.createElement("div");
 
-    div.textContent = text;
+    div.textContent =
+        text == null ? "" : text;
 
     return div.innerHTML;
 
