@@ -195,3 +195,18 @@ select {
 #reader__dashboard_section_csr {
     display: none;
 }
+
+.berhasil {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.duplikat {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
